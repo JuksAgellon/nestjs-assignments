@@ -10,28 +10,22 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get(':n') // Ensure this is correct
-    generateFibonacci(@Param('n') n: string): { sequence: number[] } {
+   @Get(':n')
+    calculateFactorial(@Param('n') n: string): { result: number } {
         const numberN = parseInt(n, 10);
-        if (isNaN(numberN) || numberN < 1) {
-            throw new BadRequestException('Please provide a valid positive integer for n.');
+        if (isNaN(numberN) || numberN < 0) {
+            throw new BadRequestException('Please provide a valid non-negative integer for n.');
         }
-        const sequence = this.fibonacci(numberN);
-        return { sequence };
+        const result = this.factorial(numberN);
+        return { result };
     }
 
-    private fibonacci(n: number): number[] {
-        const sequence: number[] = [];
-        let a = 0, b = 1;
-
-        for (let i = 0; i < n; i++) {
-            sequence.push(a);
-            const next = a + b;
-            a = b;
-            b = next;
+    private factorial(n: number): number {
+        if (n === 0) return 1; // 0! is 1
+        let result = 1;
+        for (let i = 1; i <= n; i++) {
+            result *= i;
         }
-
-        return sequence;
+        return result;
     }
-
 }
