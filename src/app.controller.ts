@@ -1,37 +1,24 @@
 import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+@Controller('prime-number')
+export class PrimeNumberController {
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
-  @Get(':n') // Ensure this is correct
-    generateFibonacci(@Param('n') n: string): { sequence: number[] } {
+    @Get(':n')
+    checkPrime(@Param('n') n: string): { isPrime: boolean } {
         const numberN = parseInt(n, 10);
-        if (isNaN(numberN) || numberN < 1) {
-            throw new BadRequestException('Please provide a valid positive integer for n.');
-        }
-        const sequence = this.fibonacci(numberN);
-        return { sequence };
+        const isPrime = this.isPrime(numberN);
+        return { isPrime };
     }
 
-    private fibonacci(n: number): number[] {
-        const sequence: number[] = [];
-        let a = 0, b = 1;
-
-        for (let i = 0; i < n; i++) {
-            sequence.push(a);
-            const next = a + b;
-            a = b;
-            b = next;
+    private isPrime(num: number): boolean {
+        if (num < 2) return false; 
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) {
+                return false;
+            }
         }
-
-        return sequence;
+        
+        return true; 
     }
-
 }
